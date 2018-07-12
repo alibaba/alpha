@@ -12,17 +12,17 @@ Alpha是一个基于PERT图构建的Android异步启动框架，它简单，高�
 使用gradle的方式:
 
 ```groovy
-compile('com.alibaba.android:alpha:1.0.0@jar')
+compile 'com.alibaba.android:alpha:1.0.0.0@jar'
 ```
 
 使用maven的方式:
 
 ```xml
 <dependency>
-    <groupId>com.alibaba.android</groupId>
-    <artifactId>alpha</artifactId>
-    <version>1.0.0</version>
-    <type>jar</type>
+  <groupId>com.alibaba.android</groupId>
+  <artifactId>alpha</artifactId>
+  <version>1.0.0.0</version>
+  <type>jar</type>
 </dependency>
 ```
 
