@@ -242,12 +242,7 @@ public class Project extends Task implements OnProjectExecuteListener {
             mCacheTask = task;
             mCacheTask.setExecuteMonitor(mMonitor);
             mIsSetPosition = false;
-            mCacheTask.addOnTaskFinishListener(new OnTaskFinishListener() {
-                @Override
-                public void onTaskFinish(String taskName) {
-                    mProject.onTaskFinish(taskName);
-                }
-            });
+            mCacheTask.addOnTaskFinishListener(new InnerOnTaskFinishListener(mProject));
             mCacheTask.addSuccessor(mFinishTask);
 
             return Builder.this;
@@ -303,6 +298,18 @@ public class Project extends Task implements OnProjectExecuteListener {
             mProject.setProjectExecuteMonitor(mMonitor);
         }
 
+    }
+
+    private static class InnerOnTaskFinishListener implements OnTaskFinishListener{
+        private Project mProject;
+
+        InnerOnTaskFinishListener(Project project) {
+            mProject = project;
+        }
+        @Override
+        public void onTaskFinish(String taskName) {
+            mProject.onTaskFinish(taskName);
+        }
     }
 
 
