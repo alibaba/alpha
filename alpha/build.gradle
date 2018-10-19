@@ -38,13 +38,22 @@ bintray {
     }
 }
 
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+
 publishing {
     publications {
         maven_android(MavenPublication) {
             groupId "com.alibaba.android"
             version "1.0.0.0"
             artifactId "alpha"
+            artifact(sourcesJar)
             artifact("$buildDir/outputs/aar/alpha-release.aar")
+
 
             pom.withXml {
                 def dependenciesNode = asNode().appendNode('dependencies')
