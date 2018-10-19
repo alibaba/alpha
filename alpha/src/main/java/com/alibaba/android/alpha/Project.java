@@ -17,6 +17,7 @@
 package com.alibaba.android.alpha;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -174,6 +175,7 @@ public class Project extends Task implements OnProjectExecuteListener {
         private AnchorTask mStartTask;
         private Project mProject;
         private ExecuteMonitor mMonitor;
+        private TaskFactory mTaskFactory;
 
         /**
          * 构建{@code ProjectBuilder}实例。
@@ -194,6 +196,14 @@ public class Project extends Task implements OnProjectExecuteListener {
             //创建完成一个Project，重新初始化builder，以便创建下一个Project
             init();
             return project;
+        }
+
+        /**
+         * 利用TaskCreator，之后可以直接用task name来操作add和after等逻辑。
+         */
+        public Builder withTaskCreator(ITaskCreator creator) {
+            mTaskFactory = new TaskFactory(creator);
+            return Builder.this;
         }
 
         /**
@@ -229,6 +239,62 @@ public class Project extends Task implements OnProjectExecuteListener {
             return Builder.this;
         }
 
+        /**
+         * 作用同{@link #add(Task)}但直接用task名称进行操作，需要提前调用{@link #withTaskCreator(ITaskCreator)}创建名称对应的task实例
+         * @param taskName 增加的{@code Task}对象的名称。
+         * @return {@code Builder}对象，可以继续添加属性或者组装{@code Task}。
+         */
+        public Builder add(String taskName) {
+            if (mTaskFactory == null) {
+                throw new IllegalAccessError(
+                    "You should set a ITaskCreator with withTaskCreator(), and then you can call add() and after() with task name.");
+            }
+
+            Task task = mTaskFactory.getTask(taskName);
+            add(task);
+
+            return Builder.this;
+        }
+
+        /**
+         * 作用同{@link #after(Task)}。但直接用task名称进行操作，需要提前调用{@link #withTaskCreator(ITaskCreator)}创建名称对应的task实例
+         * @param taskName The task to run after.
+         * @return {@code Builder}对象，可以继续添加属性或者组装{@code Task}。
+         */
+        public Builder after(String taskName) {
+            if (mTaskFactory == null) {
+                throw new IllegalAccessError(
+                    "You should set a ITaskCreator with withTaskCreator(), and then you can call add() and after() with task name.");
+            }
+
+            Task task = mTaskFactory.getTask(taskName);
+            after(task);
+
+            return Builder.this;
+        }
+
+
+        /**
+         * 作用同{@link #after(Task...)}。但直接用task名称进行操作，需要提前调用{@link #withTaskCreator(ITaskCreator)}创建名称对应的task实例
+         * @param taskNames The task to run after.
+         * @return {@code Builder}对象，可以继续添加属性或者组装{@code Task}。
+         */
+        public Builder after(String... taskNames) {
+            if (mTaskFactory == null) {
+                throw new IllegalAccessError(
+                    "You should set a ITaskCreator with withTaskCreator(), and then you can call add() and after() with task name.");
+            }
+
+            Task[] tasks = new Task[taskNames.length];
+            for (int i = 0, len = taskNames.length; i < len; i++) {
+                String taskName = taskNames[i];
+                Task task = mTaskFactory.getTask(taskName);
+                tasks[i] = task;
+            }
+            after(tasks);
+
+            return Builder.this;
+        }
 
         /**
          * 增加一个{@code Task}，在调用该方法后，需要调用{@link #after(Task)}来确定。
