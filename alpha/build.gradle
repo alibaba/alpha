@@ -17,9 +17,15 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+def bintray_user = properties.getProperty('BINTRAY_USER')
+def bintray_key = properties.getProperty('BINTRAY_KEY')
+
 bintray {
-    user = property('user')
-    key = property('key')
+    user = bintray_user
+    key = bintray_key
     publish = true
     override = true
     publications = ['maven_android']
