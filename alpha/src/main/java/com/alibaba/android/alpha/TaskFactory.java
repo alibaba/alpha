@@ -44,6 +44,7 @@ public final class TaskFactory {
             throw new IllegalArgumentException("Create task fail, there is no task corresponding to the task name. Make sure you have create a task instance in TaskCreator.");
         }
 
+        mTasks.put(taskName, task);
         return task;
     }
 }
