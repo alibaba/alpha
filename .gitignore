@@ -1,7 +1,6 @@
 .gradle
 /local.properties
 /.idea/
-/.idea/libraries
 .DS_Store
 /build
 /captures
@@ -10,3 +9,5 @@ target/
 .classpath
 .project
 .settings/
+sample/.idea
+

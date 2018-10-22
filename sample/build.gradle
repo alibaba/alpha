@@ -39,5 +39,5 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:appcompat-v7:22.2.0'
 //    compile project(':alpha')
-    compile ('com.alibaba.android:alpha:1.0.0@jar')
+    compile ('com.alibaba.android:alpha:1.0.0.1@aar')
 }

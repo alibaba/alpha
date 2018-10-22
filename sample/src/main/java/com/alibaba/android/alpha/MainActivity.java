@@ -24,6 +24,7 @@ import android.text.method.ScrollingMovementMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import com.alibaba.android.alphasample.R;
 
 
 public class MainActivity extends ActionBarActivity {

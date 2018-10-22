@@ -37,12 +37,8 @@ public class ConfigTest {
 
     public void start() {
         config();
-        MyLog.e("==ALPHA==", "start");
+        MyLog.e("==ALPHA==", "start -->" + System.currentTimeMillis());
         AlphaManager.getInstance(mContext).start();
-
-        AlphaManager.getInstance(mContext).waitUntilFinish(2000);
-
-        MyLog.e("==ALPHA==", "finish");
     }
 
     public void setOnProjectExecuteListener(OnProjectExecuteListener listener) {
@@ -52,17 +48,12 @@ public class ConfigTest {
 
     private void config() {
 
-        Task a = new TaskA();
-        Task b = new TaskB();
-        Task c = new TaskC();
-        Task d = new TaskD();
-        Task e = new TaskE();
 
-        Project.Builder builder = new Project.Builder();
-        builder.add(a);
-        builder.add(b).after(a);
-        builder.add(c).after(a);
-        builder.add(d).after(b, c);
+        Project.Builder builder = new Project.Builder().withTaskCreator(new MyTaskCreator());
+        builder.add(TASK_A);
+        builder.add(TASK_B).after(TASK_A);
+        builder.add(TASK_C).after(TASK_A);
+        builder.add(TASK_D).after(TASK_B, TASK_C);
         builder.setProjectName("innerGroup");
 
         builder.setOnProjectExecuteListener(new OnProjectExecuteListener() {
@@ -104,8 +95,8 @@ public class ConfigTest {
         });
 
 
-        builder.add(e);
-        builder.add(group).after(e);
+        builder.add(TASK_E);
+        builder.add(group).after(TASK_E);
         builder.setOnGetMonitorRecordCallback(new OnGetMonitorRecordCallback() {
             @Override
             public void onGetTaskExecuteRecord(Map<String, Long> result) {
@@ -132,9 +123,41 @@ public class ConfigTest {
 
     }
 
+    private static final String TASK_A = "TaskA";
+    private static final String TASK_B = "TaskB";
+    private static final String TASK_C = "TaskC";
+    private static final String TASK_D = "TaskD";
+    private static final String TASK_E = "TaskE";
+    private static final String TASK_F = "TaskF";
+    private static final String TASK_G = "TaskG";
+    public static class MyTaskCreator implements ITaskCreator {
+        @Override
+        public Task createTask(String taskName) {
+            Log.d("==ALPHA==", taskName);
+            switch (taskName) {
+                case TASK_A:
+                    return new TaskA();
+                case TASK_B:
+                    return new TaskB();
+                case TASK_C:
+                    return new TaskC();
+                case TASK_D:
+                    return new TaskD();
+                case TASK_E:
+                    return new TaskE();
+                case TASK_F:
+                    return new TaskF();
+                case TASK_G:
+                    return new TaskG();
+            }
+
+            return null;
+        }
+    }
+
     public static class TaskA extends Task {
         public TaskA() {
-            super("TaskA");
+            super(TASK_A);
         }
 
         @Override
@@ -147,7 +170,7 @@ public class ConfigTest {
 
     public static class TaskB extends Task {
         public TaskB() {
-            super("TaskB");
+            super(TASK_B);
             setExecutePriority(9);
         }
 
@@ -166,7 +189,7 @@ public class ConfigTest {
 
     public static class TaskC extends Task {
         public TaskC() {
-            super("TaskC");
+            super(TASK_C);
             setExecutePriority(1);
         }
 
@@ -179,7 +202,7 @@ public class ConfigTest {
 
     public static class TaskD extends Task {
         public TaskD() {
-            super("TaskD");
+            super(TASK_D);
         }
 
         @Override
@@ -190,7 +213,7 @@ public class ConfigTest {
 
     public static class TaskE extends Task {
         public TaskE() {
-            super("TaskE", true);
+            super(TASK_E, true);
         }
 
         @Override
@@ -201,7 +224,7 @@ public class ConfigTest {
 
     public static class TaskF extends Task {
         public TaskF() {
-            super("TaskF");
+            super(TASK_F);
         }
 
         @Override
@@ -212,7 +235,7 @@ public class ConfigTest {
 
     public static class TaskG extends Task {
         public TaskG() {
-            super("TaskG");
+            super(TASK_G);
         }
 
         @Override
@@ -227,17 +250,6 @@ public class ConfigTest {
         }
     }
 
-    public class SampleTask extends Task {
-        public SampleTask() {
-            super("SampleTask");
-        }
-
-        @Override
-        public void run() {
-            //do something, print a msg for example.
-            Log.d(TAG, "run SampleTask");
-        }
-    }
 
 
 }

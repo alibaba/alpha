@@ -3,11 +3,14 @@
 buildscript {
     repositories {
         mavenLocal()
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.2'
+        classpath 'com.android.tools.build:gradle:3.0.1'
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.3'
     }
 }
@@ -15,7 +18,10 @@ buildscript {
 allprojects {
     repositories {
         mavenLocal()
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots/' }
         jcenter()
+        maven {
+            url 'https://maven.google.com/'
+            name 'Google'
+        }
     }
 }
