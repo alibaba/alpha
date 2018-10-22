@@ -11,12 +11,6 @@ Alpha是一个基于PERT图构建的Android异步启动框架，它简单，高�
 ### 接入Alpha
 
 ```groovy
-repositories {
-    maven {
-        url "https://dl.bintray.com/zhangsl/maven"
-    }
-}
-
 compile 'com.alibaba.android:alpha:1.0.0.0@jar'
 ```
 
