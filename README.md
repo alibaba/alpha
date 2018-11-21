@@ -22,72 +22,71 @@ Alpha支持代码和配置文件的方式构建一个启动流程。
 1.实现自己的Task类。继承Task类，在run()函数中实现该Task需要做的事情。
 
 ```java
-	public class SampleTask extends Task{
-        public SampleTask() {
-            super("SampleTask");
-        }
-
-        @Override
-        public void run() {
-            //do something, print a msg for example.
-            Log.d(TAG, "run SampleTask");
-        }
+public class SampleTask extends Task{
+    public SampleTask() {
+        super("SampleTask");
     }
+
+    @Override
+    public void run() {
+        //do something, print a msg for example.
+        Log.d(TAG, "run SampleTask");
+    }
+}
 ```
 Task默认是在异步线程中执行的，如果这个Task需要在线程中执行，可以在构造函数中声明。  
 2.将Task组合成一个完整的Project。  
 可以用Task.ProjectBuilder依据各Task之间的依赖关系，将这些Task构建成一个完整的Project。
 
 ```java
-		private Task createCommonTaskGroup() {
-        Task a = new TaskA();
-        Task b = new TaskB();
-        Task c = new TaskC();
-        Task d = new TaskD();
-        Task e = new TaskE();
+private Task createCommonTaskGroup() {
+    Task a = new TaskA();
+    Task b = new TaskB();
+    Task c = new TaskC();
+    Task d = new TaskD();
+    Task e = new TaskE();
 
-        Project.Builder builder = new Project.Builder();
-        builder.add(a);
-        builder.add(b).after(a);
-        builder.add(c).after(a);
-        builder.add(d).after(b, c);
-        builder.add(e).after(a);
-        Project group = builder.create();
+    Project.Builder builder = new Project.Builder();
+    builder.add(a);
+    builder.add(b).after(a);
+    builder.add(c).after(a);
+    builder.add(d).after(b, c);
+    builder.add(e).after(a);
+    Project group = builder.create();
 
-        return group;
-    }
-
+    return group;
+}
 ```
 ProjectBuilder生成的Project本身可以作为一个Task嵌入到另外一个Project中。
 ```java
-    private Task createCommonTaskGroup() {
-        Task a = new TaskA();
-        Task b = new TaskB();
-        Task c = new TaskC();
-        Task d = new TaskD();
-        Task e = new TaskE();
+private Task createCommonTaskGroup() {
+    Task a = new TaskA();
+    Task b = new TaskB();
+    Task c = new TaskC();
+    Task d = new TaskD();
+    Task e = new TaskE();
 
-        Project.Builder builder = new Project.Builder();
-        builder.add(a);
-        builder.add(b).after(a);
-        builder.add(c).after(a);
-        builder.add(d).after(b, c);
-        builder.add(e).after(a);
-        Project group = builder.create();
+    Project.Builder builder = new Project.Builder();
+    builder.add(a);
+    builder.add(b).after(a);
+    builder.add(c).after(a);
+    builder.add(d).after(b, c);
+    builder.add(e).after(a);
+    Project group = builder.create();
 
-        return group;
-    }
+    return group;
+}
 
-    private void createProject() {
-        Task group = createCommonTaskGroup();
-        Task f = new TaskF();
+private void createProject() {
+    Task group = createCommonTaskGroup();
+    Task f = new TaskF();
 
-        Project.Builder builder = new Project.Builder();
-        builder.add(group);
-        builder.add(f);
+    Project.Builder builder = new Project.Builder();
+    builder.add(group);
+    builder.add(f);
 
-        Project project = builder.create();
-    }
+    Project project = builder.create();
+}
 ```
 3.为构建完成的Project配置对应的进程。
 
@@ -184,17 +183,17 @@ AlphaManager.getInstance(mContext).start();
 3.加载配置文件，这里我将该配置文件命名为tasklist.xml，并且放在asset中。
 
 ```java
-		InputStream in = null;
-        try {
-        
-            in = mContext.getAssets().open("tasklist.xml");
-            AlphaManager.getInstance(mContext).addProjectsViaFile(in);
+InputStream in = null;
+try {
 
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        } finally {
-            AlphaUtils.closeSafely(in);
-        }
+    in = mContext.getAssets().open("tasklist.xml");
+    AlphaManager.getInstance(mContext).addProjectsViaFile(in);
+
+} catch (IOException ex) {
+    ex.printStackTrace();
+} finally {
+    AlphaUtils.closeSafely(in);
+}
 ```
 4.执行启动流程
 
