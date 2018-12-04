@@ -310,8 +310,7 @@ public class AlphaManager {
      * @param task            在启动结束时执行的{@code task}
      * @param mode            启动流程的执行模型。对应{@link AlphaManager#MAIN_PROCESS_MODE},
      *                        {@link AlphaManager#ALL_PROCESS_MODE}, {@link AlphaManager#SECONDARY_PROCESS_MODE}
-     * @param executePriority 执行优先级。对于<strong>同一时机</strong>执行的{@code task}，由于线程池的线程数有限，
-     *                        部分{@code task}可能不能立即执行，所以对于此种情况，需要设置执行优先级。数字越大，优先级越高，执行时机越早。
+     * @param executePriority Linux线程优先级，从-19到20，-19优先级最高，20最低。
      */
     public void executeAfterStartup(Task task, int mode, int executePriority) {
         if (!AlphaUtils.isMatchMode(mContext, mode)) {
